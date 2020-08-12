@@ -1,0 +1,10 @@
+{
+  "generator-jhipster-blueprint": {
+    "promptValues": {
+      "githubName": "jackfive",
+      "authorName": "Felipe Machado",
+      "authorEmail": "felipe.machado.86@gmail.com",
+      "authorUrl": ""
+    }
+  }
+}

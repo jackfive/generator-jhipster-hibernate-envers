@@ -1,0 +1,89 @@
+package <%= packageName %>.config;
+
+import java.io.Serializable;
+import java.text.DateFormat;
+import java.util.Date;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.hibernate.envers.RevisionEntity;
+import org.hibernate.envers.RevisionNumber;
+import org.hibernate.envers.RevisionTimestamp;
+
+@Entity
+@Table(name = "revinfo")
+@RevisionEntity(RevisionListenerImpl.class)
+public class Revision implements Serializable {
+    private static final long serialVersionUID = 8530213963961662300L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @RevisionNumber
+    private int rev;
+
+    @RevisionTimestamp
+    private long revtstmp;
+
+    private String responsible;
+
+    public String getResponsible() {
+        return responsible;
+    }
+
+    public void setResponsible(String responsible) {
+        this.responsible = responsible;
+    }
+
+    public int getRev() {
+        return rev;
+    }
+
+    public void setRev(int rev) {
+        this.rev = rev;
+    }
+
+    @Transient
+    public Date getRevisionDate() {
+        return new Date(revtstmp);
+    }
+
+    public long getRevtstmp() {
+        return revtstmp;
+    }
+
+    public void setRevtstmp(long revtstmp) {
+        this.revtstmp = revtstmp;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Revision)) {
+            return false;
+        }
+
+        final Revision that = (Revision) o;
+        return rev == that.rev && revtstmp == that.revtstmp;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        result = rev;
+        result = 31 * result + (int) (revtstmp ^ (revtstmp >>> 32));
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Revision(rev = " + rev + ", revisionDate = "
+                + DateFormat.getDateTimeInstance().format(getRevisionDate()) + ")";
+    }
+}

@@ -1,0 +1,14 @@
+package <%= packageName %>.config;
+
+import org.hibernate.envers.RevisionListener;
+import <%= packageName %>.security.SecurityUtils;
+
+public class RevisionListenerImpl implements RevisionListener {
+
+    @Override
+    public void newRevision(Object revisionEntity) {
+        Revision rev = (Revision) revisionEntity;
+        rev.setResponsible(SecurityUtils.getCurrentUserLogin().orElse(""));
+    }
+
+}
